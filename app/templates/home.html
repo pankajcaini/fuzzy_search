@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Search Suggestions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EEEEEE;
+        }
+        input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        }
+        .suggestions {
+            display: none;
+            width: 320px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            background: white;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        } 
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background: #f0f0f0;
+        }
+
+        .wrapper{
+            display: flex;
+            justify-content: center;
+            height: 8vh;
+            margin-top: 50px;
+        }
+
+        .wrapper-2{
+            height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="wrapper">
+        <input type="text" id="search" placeholder="Search..." onkeyup="fetchSuggestions()">
+    </div>
+
+    <div class="wrapper-2">
+        <div class="suggestions" id="suggestions"></div>
+    </div>
+
+
+
+
+    <script>
+        async function fetchSuggestions() {
+            const sterm = document.getElementById('search').value;
+            if (!sterm) {
+                document.getElementById('suggestions').innerHTML = '';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/searchsimilar/${sterm}`);
+
+                const data = await response.json();
+                console.log(data);
+                
+
+                let suggestionBox = document.getElementById('suggestions');
+                suggestionBox.innerHTML = '';
+                suggestionBox.style.display = "block";
+                
+                data.suggestions.forEach(word => {
+                    let div = document.createElement('div');
+                    div.textContent = word;
+                    div.style.borderTop = "1px dotted black";
+                    div.onclick = () => {
+                        document.getElementById('search').value = word;
+                        suggestionBox.innerHTML = '';
+                    };
+                    suggestionBox.appendChild(div);
+                });
+
+
+            } catch (error) {
+                console.error('Error fetching suggestions:', error);
+            }
+        }
+    </script>
+</body>
+</html>

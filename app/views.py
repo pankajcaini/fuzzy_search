@@ -6,7 +6,7 @@ from thefuzz import process, fuzz
 words = [
     'apple','apply','application','pat','cat','bat','pen','pack','lack','jack',"rekhachithram","mr nobody","receive","luck","look",
     "mug","centimetre","coordination","inception","intercept","bowl","ball","iphone","phone","kill","pill","still","wall","stretch","spiderman","postman",
-    "dear","bear","harry potter","global","library","axieva"
+    "dear","bear","harry potter","global","library"
 ]
 
 
